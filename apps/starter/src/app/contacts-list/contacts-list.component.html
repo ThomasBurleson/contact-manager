@@ -1,3 +1,10 @@
+<mat-toolbar>
+  <mat-form-field class="trm-search-container">
+    <input matInput (input)="search($event.target.value)" type="text">
+  </mat-form-field>
+  <mat-icon color="accent">search</mat-icon>
+</mat-toolbar>
+
 <mat-list>
   <a mat-list-item
     [routerLink]="['/contact', contact.id]"
