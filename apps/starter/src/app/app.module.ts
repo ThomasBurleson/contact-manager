@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -32,9 +32,11 @@ import { MockContactsService } from './contacts.service-mock';
     FormsModule,
     FlexLayoutModule,
     HttpClientModule,
+    ReactiveFormsModule,
     ContactsMaterialModule,
     ContactsNgRxModule,
-    RouterModule.forRoot(APP_ROUTES)
+    RouterModule.forRoot(APP_ROUTES),
+    ReactiveFormsModule
   ],
   providers: [
     ContactsService,

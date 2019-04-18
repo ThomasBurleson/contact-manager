@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs/internal/Subject';
@@ -14,13 +15,14 @@ import { ContactsService } from '../contacts.service';
 })
 export class ContactsListComponent {
   contacts$: Observable<Contact[]>;
+  searchControl = new FormControl();
 
   constructor(private contactsService: ContactsService) { }
 
   ngOnInit() {
     this.contacts$ = this.contactsService.getContacts();
 
-    this.searchCriteria$.pipe(
+    this.searchControl.valueChanges.pipe(
       debounceTime(250),
       distinctUntilChanged()
     ).subscribe(this.search.bind(this));
@@ -35,6 +37,4 @@ export class ContactsListComponent {
     this.contacts$ = this.contactsService.search(criteria);
   }
 
-  private emitter = new Subject<string>();
-  private searchCriteria$ = this.emitter.asObservable();
 }
