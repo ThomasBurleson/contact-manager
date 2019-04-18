@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { Observable } from 'rxjs';
-import { Subject } from 'rxjs/internal/Subject';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Observable, merge } from 'rxjs';
+import { debounceTime, delay, distinctUntilChanged, switchMap, takeUntil } from 'rxjs/operators';
 
 import { Contact } from '../models/contact';
 import { ContactsService } from '../contacts.service';
@@ -15,26 +14,27 @@ import { ContactsService } from '../contacts.service';
 })
 export class ContactsListComponent {
   contacts$: Observable<Contact[]>;
-  searchControl = new FormControl();
+  searchControl = new FormControl('');
 
   constructor(private contactsService: ContactsService) { }
 
   ngOnInit() {
-    this.contacts$ = this.contactsService.getContacts();
-
-    this.searchControl.valueChanges.pipe(
+    const searchResults$ = this.searchControl.valueChanges.pipe(
       debounceTime(250),
-      distinctUntilChanged()
-    ).subscribe(this.search.bind(this));
+      distinctUntilChanged(),
+      switchMap(term => this.contactsService.search(term))
+    );
+    const allContacts$ = this.contactsService.getContacts().pipe(
+      delay(6000),
+      takeUntil(searchResults$),
+    );
 
+
+    this.contacts$ = merge(allContacts$, searchResults$);
   }
 
   trackByContactId(index, contact) {
     return contact.id;
-  }
-
-  search(criteria:string) {
-    this.contacts$ = this.contactsService.search(criteria);
   }
 
 }

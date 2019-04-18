@@ -30,13 +30,12 @@ import { MockContactsService } from './contacts.service-mock';
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     FlexLayoutModule,
     HttpClientModule,
-    ReactiveFormsModule,
     ContactsMaterialModule,
     ContactsNgRxModule,
     RouterModule.forRoot(APP_ROUTES),
-    ReactiveFormsModule
   ],
   providers: [
     ContactsService,
